@@ -10,7 +10,12 @@ public class main {
         Scanner sca = new Scanner(System.in);
         int nCasillas;
         char[] tablero;
-        String[][] jugadores;
+        String[][] jugador;
+        
+        System.out.println("Ingrese la cantidad de jugadores:");
+        jugador = new String[sca.nextInt()][3];
+        
+        
         
         
         System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
@@ -30,14 +35,13 @@ public class main {
     
     public static char[] generarTablero(int nCasillas){
         char[] tablero = new char[nCasillas];
-        
         for(int i=0;i<tablero.length;i++){
             tablero[i] = 'x';
         }
+        int especial = (int)(Math.random()*5);
+        
         return tablero;
     }
     
-    public static void agregarJugadores(String[][] jugadores){
-        
-    }
+   
 }

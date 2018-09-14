@@ -16,5 +16,10 @@ public class main {
         int resultado = (int)(2*(Math.random()*6+1));
         return resultado;
     }
+    
+    public static char[] generarTablero(int nCasillas){
+        char[] tablero = new char[nCasillas];
+        return tablero;
+    }
 
 }

@@ -2,6 +2,7 @@
  *
  * @author Pardo
  */
+import java.math.MathContext;
 import java.util.*;
 
 public class main {
@@ -76,6 +77,69 @@ public class main {
         return tablero;
     }
     
+    public static void desafio(Jugador[] jugador, int indice){
+        int aleatorio = (int)(Math.random()*2);
+        int signo = (int)(Math.random()*2);
+        switch (aleatorio){
+            case 0:
+                aleatorio = (int)(Math.random()*5)+1;
+                if(signo == 0){
+                    jugador[indice].setPosicion(-aleatorio);
+                }
+                else{
+                    jugador[indice].setPosicion(aleatorio);
+                }
+                break;
+                
+            case 1:
+                aleatorio = (int)(Math.random()*4)+1;
+                if(signo == 0){
+                    for(int i=0;i<jugador.length;i++){
+                        jugador[i].setVida(-aleatorio);
+                    }
+                }
+                else{
+                    for(int i=0;i<jugador.length;i++){
+                        jugador[i].setVida(aleatorio);
+                    }
+                }
+                break;
+        }
+    }
     
-   
+    public static void portal(Jugador[] jugador, int indice, char[] tablero){
+        int aleatorio = (int)Math.random()*2;
+        switch (aleatorio){
+            case 0:
+                for(int i=0;i<tablero.length;i++){
+                    if(tablero[i] == 'P' && i<jugador[indice].getPosicion()){
+                        jugador[indice].setAbsolutePosicion(i);
+                        break;
+                    }
+                }
+                break;
+            case 1:
+                for(int i=0;i<tablero.length;i++){
+                    if(tablero[i] == 'P' && i>jugador[indice].getPosicion()){
+                        jugador[indice].setAbsolutePosicion(i);
+                        break;
+                    }
+                }
+                break;
+        }
+    }
+    
+    public static void vida(Jugador[] jugador, int indice){
+        int aleatorio = (int)(Math.random()*4+1);
+        int signo = (int)Math.random()*2+1;
+        switch (signo){
+            case 0:
+                jugador[indice].setVida(-aleatorio);
+                break;
+            case 1:
+                jugador[indice].setVida(aleatorio);
+                break;
+        }
+    }
+            
 }

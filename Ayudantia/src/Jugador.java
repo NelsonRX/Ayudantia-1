@@ -7,11 +7,13 @@ public class Jugador {
     private String nombre;
     private int vida;
     private int posicion;
+    private int max;
     
-    public Jugador(String nombre){
+    public Jugador(String nombre, int max){
         this.nombre = nombre;
         this.vida = 15;
         this.posicion = 0;
+        this.max = max;
     }
     
     public void setVida(int cant){
@@ -24,6 +26,9 @@ public class Jugador {
         this.posicion = this.posicion + posicion;
         if(this.posicion < 0){
             this.posicion = 0;
+        }
+        if(this.posicion > this.max){
+            this.posicion = this.max;
         }
     }
     

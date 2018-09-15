@@ -11,6 +11,13 @@ public class main {
         int nCasillas;
         char[] tablero;
         
+        System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
+        nCasillas = sca.nextInt();
+        while(nCasillas < 20){
+            System.out.println("El numero de casillas no puede ser menor a 20");
+            nCasillas = sca.nextInt();
+        }
+        tablero = generarTablero(nCasillas);
         
         System.out.println("Ingrese la cantidad de jugadores:");
         int cantJugadores = sca.nextInt();
@@ -19,46 +26,41 @@ public class main {
             System.out.println("Por favor ingrese nuevamente la cantidad de jugadores");
             cantJugadores = sca.nextInt();
         }
-        
         Jugador[] jugador = new Jugador[cantJugadores];
         for(int i=0;i<jugador.length;i++){
             System.out.println("Ingrese el nombre de jugador n°"+(i+1));
-            jugador[i] = new Jugador(sca.next());
+            jugador[i] = new Jugador(sca.next(), nCasillas-1);
         }
-        
-        
-        
-        
-        System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
-        nCasillas = sca.nextInt();
-        while(nCasillas < 20){
-            System.out.println("El numero de casillas no puede ser menor a 20");
-            nCasillas = sca.nextInt();
-        }
-        tablero = generarTablero(nCasillas);
+        boolean ganador = false;
         do{
+            mostrarTablero(tablero);
             for(int i=0;i<jugador.length;i++){
                 mostarJugadores(jugador);
-                mostrarTablero(tablero);
                 System.out.println(jugador[i].getNombre()+": Presiona una tecla para lanzar dados");
                 sca.next();
                 int dados = lanzarDados();
                 System.out.println("El resultado de los dados es: "+dados);
                 jugador[i].setPosicion(dados);
-                if(tablero[jugador[i].getPosicion()] != 'x'){
-                    if(tablero[jugador[i].getPosicion()] == 'P'){
-                        portal(jugador, i, tablero);
-                    }
-                    if(tablero[jugador[i].getPosicion()] == 'S'){
-                        vida(jugador, i);
-                    }
-                    if(tablero[jugador[i].getPosicion()] == 'D'){
-                        desafio(jugador, i);
-                    }
+                if(jugador[i].getPosicion() == (nCasillas-1) ){
+                    System.out.println(jugador[i].getNombre()+" es el Ganador");
+                    ganador = true;
+                    break;
                 }
-            }
-            
-        }while(nCasillas>0);
+                else{
+                    if(tablero[jugador[i].getPosicion()] != 'x'){
+                        if(tablero[jugador[i].getPosicion()] == 'P'){
+                            portal(jugador, i, tablero);
+                        }
+                        if(tablero[jugador[i].getPosicion()] == 'S'){
+                            vida(jugador, i);
+                        }
+                      if(tablero[jugador[i].getPosicion()] == 'D'){
+                         desafio(jugador, i);
+                        }
+                     }
+                }
+            } 
+        }while(!ganador);
     }
     
     public static int lanzarDados(){
@@ -173,4 +175,5 @@ public class main {
             System.out.println(jugador[i].getNombre()+"\t"+jugador[i].getVida()+"\t"+jugador[i].getPosicion());
         }
     }
+    
 }

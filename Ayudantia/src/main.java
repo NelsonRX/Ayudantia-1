@@ -2,7 +2,6 @@
  *
  * @author Pardo
  */
-import java.math.MathContext;
 import java.util.*;
 
 public class main {
@@ -13,7 +12,7 @@ public class main {
         char[] tablero;
         
         
-       /* System.out.println("Ingrese la cantidad de jugadores:");
+        System.out.println("Ingrese la cantidad de jugadores:");
         int cantJugadores = sca.nextInt();
         while(cantJugadores < 1){
             System.out.println("La cantidad de jugadores minima es de 1");
@@ -28,7 +27,7 @@ public class main {
         }
         
         
-        */
+        
         
         System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
         nCasillas = sca.nextInt();
@@ -37,10 +36,29 @@ public class main {
             nCasillas = sca.nextInt();
         }
         tablero = generarTablero(nCasillas);
-        for(int i=0;i<tablero.length;i++){
-            System.out.print(tablero[i]+" ");
-        }
-       
+        do{
+            for(int i=0;i<jugador.length;i++){
+                mostarJugadores(jugador);
+                mostrarTablero(tablero);
+                System.out.println(jugador[i].getNombre()+": Presiona una tecla para lanzar dados");
+                sca.next();
+                int dados = lanzarDados();
+                System.out.println("El resultado de los dados es: "+dados);
+                jugador[i].setPosicion(dados);
+                if(tablero[jugador[i].getPosicion()] != 'x'){
+                    if(tablero[jugador[i].getPosicion()] == 'P'){
+                        portal(jugador, i, tablero);
+                    }
+                    if(tablero[jugador[i].getPosicion()] == 'S'){
+                        vida(jugador, i);
+                    }
+                    if(tablero[jugador[i].getPosicion()] == 'D'){
+                        desafio(jugador, i);
+                    }
+                }
+            }
+            
+        }while(nCasillas>0);
     }
     
     public static int lanzarDados(){
@@ -131,7 +149,7 @@ public class main {
     
     public static void vida(Jugador[] jugador, int indice){
         int aleatorio = (int)(Math.random()*4+1);
-        int signo = (int)Math.random()*2+1;
+        int signo = (int)(Math.random()*2+1);
         switch (signo){
             case 0:
                 jugador[indice].setVida(-aleatorio);
@@ -141,5 +159,18 @@ public class main {
                 break;
         }
     }
-            
+    
+    public static void mostrarTablero(char[] tablero){
+        for(int i=0;i<tablero.length;i++){
+            System.out.print(tablero[i]+" ");
+        }
+        System.out.println("");
+    }
+    
+    public static void mostarJugadores(Jugador[] jugador){
+        
+        for(int i=0;i<jugador.length;i++){
+            System.out.println(jugador[i].getNombre()+"\t"+jugador[i].getVida()+"\t"+jugador[i].getPosicion());
+        }
+    }
 }

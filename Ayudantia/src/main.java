@@ -61,6 +61,7 @@ public class main {
                 }
             } 
         }while(!ganador);
+        
     }
     
     public static int lanzarDados(){

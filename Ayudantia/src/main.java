@@ -11,7 +11,8 @@ public class main {
         int nCasillas;
         char[] tablero;
         
-        System.out.println("Ingrese la cantidad de jugadores:");
+        
+       /* System.out.println("Ingrese la cantidad de jugadores:");
         int cantJugadores = sca.nextInt();
         while(cantJugadores < 1){
             System.out.println("La cantidad de jugadores minima es de 1");
@@ -22,11 +23,11 @@ public class main {
         Jugador[] jugador = new Jugador[cantJugadores];
         for(int i=0;i<jugador.length;i++){
             System.out.println("Ingrese el nombre de jugador n°"+(i+1));
-            agregarJugador(jugador, sca.next(), i);
+            jugador[i] = new Jugador(sca.next());
         }
         
         
-        
+        */
         
         System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
         nCasillas = sca.nextInt();
@@ -35,6 +36,9 @@ public class main {
             nCasillas = sca.nextInt();
         }
         tablero = generarTablero(nCasillas);
+        for(int i=0;i<tablero.length;i++){
+            System.out.print(tablero[i]+" ");
+        }
        
     }
     
@@ -45,18 +49,33 @@ public class main {
     
     public static char[] generarTablero(int nCasillas){
         char[] tablero = new char[nCasillas];
-        tablero[0] = 'P';
+        tablero[0] = 'I';
         tablero[nCasillas-1] = 'F';
-        for(int i=0;i<tablero.length-1;i++){
+        
+        for(int i=1;i<tablero.length-1;i++){
             tablero[i] = 'x';
+        }
+        
+        for(int i=3;i<tablero.length;i++){
+            if(i%4 == 0){
+                if(i<tablero.length){
+                    tablero[i] = 'P';
+                }
+                i++;
+                if(i<tablero.length){
+                    tablero[i] = 'S';
+                }
+                i = i+2;
+                if(i<tablero.length){
+                    tablero[i] = 'D';
+                }
+                i = i+4;
+            }
         }
         
         return tablero;
     }
     
-    public static void agregarJugador(Jugador[] lista, String nombre, int pos){
-        lista[pos] = new Jugador(nombre);
-    }
     
    
 }

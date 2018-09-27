@@ -49,10 +49,10 @@ public class main {
                 else{
                     if(tablero[jugador[i].getPosicion()] != 'x'){
                         if(tablero[jugador[i].getPosicion()] == 'P'){
-                            portal(jugador, i, tablero);
+                            portal(jugador[i], tablero);
                         }
                         if(tablero[jugador[i].getPosicion()] == 'S'){
-                            vida(jugador, i);
+                            vida(jugador[i]);
                         }
                       if(tablero[jugador[i].getPosicion()] == 'D'){
                          desafio(jugador, i);
@@ -65,8 +65,9 @@ public class main {
     }
     
     public static int lanzarDados(){
-        int resultado = (int)((Math.random()*6+1)+(Math.random()*6+1));
-        return resultado;
+        int resultado1 = (int)(Math.random()*6+1);
+        int resultado2 = (int)(Math.random()*6+1);
+        return resultado1+resultado2;
     }
     
     public static char[] generarTablero(int nCasillas){
@@ -75,27 +76,17 @@ public class main {
         tablero[nCasillas-1] = 'F';
         
         for(int i=1;i<tablero.length-1;i++){
-            tablero[i] = 'x';
-        }
-        
-        for(int i=3;i<tablero.length;i++){
-            if(i%4 == 0){
-                if(i<tablero.length){
-                    tablero[i] = 'P';
-                }
-                i++;
-                if(i<tablero.length){
-                    tablero[i] = 'S';
-                }
-                i = i+2;
-                if(i<tablero.length){
-                    tablero[i] = 'D';
-                }
-                i = i+4;
-            }
+            tablero[i] = casillaRandom();
         }
         
         return tablero;
+    }
+    
+    private static char casillaRandom(){
+        char casillas[] = {'x','P','S','D'};
+        int aleatorio = (int)(Math.random()*4);
+        
+        return casillas[aleatorio];
     }
     
     public static void desafio(Jugador[] jugador, int indice){
@@ -128,21 +119,21 @@ public class main {
         }
     }
     
-    public static void portal(Jugador[] jugador, int indice, char[] tablero){
-        int aleatorio = (int)Math.random()*2;
+    public static void portal(Jugador jugador, char[] tablero){
+        int aleatorio = (int)(Math.random()*2);
         switch (aleatorio){
             case 0:
-                for(int i=0;i<tablero.length;i++){
-                    if(tablero[i] == 'P' && i<jugador[indice].getPosicion()){
-                        jugador[indice].setAbsolutePosicion(i);
+                for(int i=jugador.getPosicion();i>0;i--){
+                    if(tablero[i] == 'P' && i<jugador.getPosicion()){
+                        jugador.setAbsolutePosicion(i);
                         break;
                     }
                 }
                 break;
             case 1:
-                for(int i=0;i<tablero.length;i++){
-                    if(tablero[i] == 'P' && i>jugador[indice].getPosicion()){
-                        jugador[indice].setAbsolutePosicion(i);
+                for(int i=jugador.getPosicion();i<tablero.length;i++){
+                    if(tablero[i] == 'P' && i>jugador.getPosicion()){
+                        jugador.setAbsolutePosicion(i);
                         break;
                     }
                 }
@@ -150,15 +141,15 @@ public class main {
         }
     }
     
-    public static void vida(Jugador[] jugador, int indice){
+    public static void vida(Jugador jugador){
         int aleatorio = (int)(Math.random()*4+1);
-        int signo = (int)(Math.random()*2+1);
+        int signo = (int)(Math.random()*2);
         switch (signo){
             case 0:
-                jugador[indice].setVida(-aleatorio);
+                jugador.setVida(-aleatorio);
                 break;
             case 1:
-                jugador[indice].setVida(aleatorio);
+                jugador.setVida(aleatorio);
                 break;
         }
     }
@@ -171,7 +162,6 @@ public class main {
     }
     
     public static void mostarJugadores(Jugador[] jugador){
-        
         for(int i=0;i<jugador.length;i++){
             System.out.println(jugador[i].getNombre()+"\t"+jugador[i].getVida()+"\t"+jugador[i].getPosicion());
         }

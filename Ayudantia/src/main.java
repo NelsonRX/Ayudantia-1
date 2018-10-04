@@ -36,9 +36,6 @@ public class main {
         do{
             mostrarTablero(tablero);
             for(int i=0;i<jugador.length;i++){
-                if(isDead(jugador[i])){
-                    continue;
-                }
                 mostarJugadores(jugador);
                 System.out.println(jugador[i].getNombre()+": Elija una opcion\n1.- Tirar dados\n2.-Meditar");
                 opcion = leerInt();
@@ -57,17 +54,7 @@ public class main {
                             break;
                         }
                         else{
-                            if(tablero[jugador[i].getPosicion()] != 'x'){
-                                if(tablero[jugador[i].getPosicion()] == 'P'){
-                                    portal(jugador[i], tablero);
-                                }
-                                if(tablero[jugador[i].getPosicion()] == 'S'){
-                                    vida(jugador[i]);
-                                }
-                                if(tablero[jugador[i].getPosicion()] == 'D'){
-                                    desafio(jugador, i);
-                                }
-                            }
+                            checkCasilla(jugador, i, tablero);
                         }
                         break;
                         
@@ -81,24 +68,35 @@ public class main {
         
     }
     
-    public static boolean isDead(Jugador jugador){
-        boolean muerto = false;
-        if(jugador.getVida() <= 0){
-            muerto = true;
+    public static void checkCasilla(Jugador[] jugador, int indice, char[] tablero){
+        if(tablero[jugador[indice].getPosicion()] != 'x'){
+            if(tablero[jugador[indice].getPosicion()] == 'P'){
+                portal(jugador[indice], tablero);
+            }
+            if(tablero[jugador[indice].getPosicion()] == 'S'){
+                vida(jugador[indice]);
+            }
+            if(tablero[jugador[indice].getPosicion()] == 'D'){
+                desafio(jugador, indice);
+            }
         }
-        return muerto;
     }
-    
+   
     private static int leerInt(){
-        int lectura;
-        Scanner leer = new Scanner(System.in);
-        try{
-            lectura = leer.nextInt();
-        }
-        catch(InputMismatchException e){
-            lectura = -1;
-        }
-        return lectura;
+        int numero = 0;
+        boolean lectura = false;
+        do{
+            try{
+                Scanner leer = new Scanner(System.in);
+                numero = leer.nextInt();
+                lectura = true;
+            }
+            catch(InputMismatchException e){
+                lectura = false;
+                System.out.println("Debes ingresar un numero entero");
+            }
+        }while(!lectura);
+        return numero;
     }
     
     public static int lanzarDados(){
@@ -158,7 +156,7 @@ public class main {
     
     public static void portal(Jugador jugador, char[] tablero){
         int aleatorio = (int)(Math.random()*2);
-        switch (aleatorio){
+        switch (aleatorio){ 
             case 0:
                 for(int i=jugador.getPosicion();i>0;i--){
                     if(tablero[i] == 'P' && i<jugador.getPosicion()){

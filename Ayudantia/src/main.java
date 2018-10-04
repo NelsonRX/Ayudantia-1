@@ -12,20 +12,11 @@ public class main {
         char[] tablero;
         
         System.out.println("Ingrese el numero de casillas del tablero (no menor a 20): ");        
-        cantCasillas = leerInt();
-        while(cantCasillas < 20){
-            System.out.println("El numero de casillas no puede ser menor a 20");
-            cantCasillas = leerInt();
-        }
+        cantCasillas = validar(20, "La cantidad de casillas no puede ser menor  20");
         tablero = generarTablero(cantCasillas);
         
         System.out.println("Ingrese la cantidad de jugadores:");
-        cantJugadores = leerInt();
-        while(cantJugadores < 1){
-            System.out.println("La cantidad de jugadores minima es de 1");
-            System.out.println("Por favor ingrese nuevamente la cantidad de jugadores");
-            cantJugadores = leerInt();
-        }
+        cantJugadores = validar(1, "La cantidad minima de jugadores es 1");
         Jugador[] jugador = new Jugador[cantJugadores];
         for(int i=0;i<jugador.length;i++){
             System.out.println("Ingrese el nombre de jugador n°"+(i+1));
@@ -38,16 +29,12 @@ public class main {
             for(int i=0;i<jugador.length;i++){
                 mostarJugadores(jugador);
                 System.out.println(jugador[i].getNombre()+": Elija una opcion\n1.- Tirar dados\n2.-Meditar");
-                opcion = leerInt();
-                while(opcion<1 || opcion>2){
-                    System.out.println("Debe elegir entre 1 y 2");
-                    opcion = leerInt();
-                }
+                opcion = validar(1, 2, "Debes elegir entre 1 y 2");
                 switch (opcion){
                     case 1:
                         int dados = lanzarDados();
                         System.out.println("El resultado de los dados es: "+dados);
-                        jugador[i].avanzar(dados);
+                        jugador[i].mover(dados);
                         if(jugador[i].getPosicion() == (cantCasillas-1) ){
                             System.out.println(jugador[i].getNombre()+" es el Ganador");
                             ganador = true;
@@ -59,13 +46,45 @@ public class main {
                         break;
                         
                     case 2:
-                        System.out.println("Ingrese 1.- para avanzar y 2.- para retroceder");
-                        
+                        meditar(jugador[i]);
+                        checkCasilla(jugador, i, tablero);
                     }
                 
             }
         }while(!ganador);
         
+    }
+    
+    public static void meditar(Jugador jugador){
+        System.out.println("Ingrese la cantidad de casillas que desea moverse: (-X para retroceder X posiciones)");
+        if (jugador.getMeditar() > 0){
+            jugador.usoMeditar();
+            int movimiento = validar(-3, 3, "Solo puedes moverte 3 casillas alrededor de tu posicion actual");
+            jugador.mover(movimiento);
+            jugador.darVida(1);
+        }
+        else{
+            System.out.println("No le quedan mas \"Meditar\"");
+            jugador.darVida(-1);
+        }
+    }
+    
+    public static int validar(int condicion, String texto){
+        int variable = leerInt();
+        while(variable < condicion){
+            System.out.println(texto);
+            variable = leerInt();
+        }
+        return variable;
+    }
+    
+    public static int validar(int condicionInferior, int condicionSuperior, String texto){
+        int variable = leerInt();
+        while(variable < condicionInferior || condicionSuperior < variable){
+            System.out.println(texto);
+            variable = leerInt();
+        }
+        return variable;
     }
     
     public static void checkCasilla(Jugador[] jugador, int indice, char[] tablero){
@@ -131,10 +150,10 @@ public class main {
             case 0:
                 aleatorio = (int)(Math.random()*5)+1;
                 if(signo == 0){
-                    jugador[indice].avanzar(-aleatorio);
+                    jugador[indice].mover(-aleatorio);
                 }
                 else{
-                    jugador[indice].avanzar(aleatorio);
+                    jugador[indice].mover(aleatorio);
                 }
                 break;
                 
@@ -142,12 +161,12 @@ public class main {
                 aleatorio = (int)(Math.random()*4)+1;
                 if(signo == 0){
                     for(int i=0;i<jugador.length;i++){
-                        jugador[i].setVida(-aleatorio);
+                        jugador[i].darVida(-aleatorio);
                     }
                 }
                 else{
                     for(int i=0;i<jugador.length;i++){
-                        jugador[i].setVida(aleatorio);
+                        jugador[i].darVida(aleatorio);
                     }
                 }
                 break;
@@ -181,10 +200,10 @@ public class main {
         int signo = (int)(Math.random()*2);
         switch (signo){
             case 0:
-                jugador.setVida(-aleatorio);
+                jugador.darVida(-aleatorio);
                 break;
             case 1:
-                jugador.setVida(aleatorio);
+                jugador.darVida(aleatorio);
                 break;
         }
     }
@@ -197,11 +216,10 @@ public class main {
     }
     
     public static void mostarJugadores(Jugador[] jugador){
-        System.out.println("Nombre\tVida\tPosicion");
+        System.out.println("Nombre\tVida\tPosicion\tMeditar");
         for(int i=0;i<jugador.length;i++){
-            System.out.println(jugador[i].getNombre()+"\t"+jugador[i].getVida()+"\t"+jugador[i].getPosicion());
+            System.out.println(jugador[i].getNombre()+"\t"+jugador[i].getVida()+"\t"+jugador[i].getPosicion()+"\t\t"+jugador[i].getMeditar());
         }
     }
     
 }
-
